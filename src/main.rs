@@ -30,6 +30,47 @@ fn get_pyramid(start: i8, total_numbers: i32) -> Result<String, String> {
         grid.push(row)
     }
 
+    let mut current = (0, (number_of_columns - 1) / 2);
+
+    let mut down_end = (number_of_rows - 1, number_of_columns - 1);
+    let mut left_end = (number_of_rows - 1, 0);
+    let mut up_end = (current.0 - 1, current.1 + 1);
+
+    let mut count = 0;
+    let mut jumper = start;
+
+    // println!("{}, {}", down_end.0, down_end.1);
+    // while count < total_numbers {
+        // Go down
+        while current <= down_end {
+            grid[current.0 as usize][current.1 as usize] =
+                std::char::from_u32((jumper % 10) as u32).unwrap();
+
+            jumper += 1;
+            current.0 += 1;
+            current.1 += 1;
+        }
+
+        down_end.0 -= 1;
+        down_end.1 -= 1;
+
+        // println!("{}, {}", down_end.0, down_end.1);
+
+        // Go left
+        println!("{}, {}", left_end.0, left_end.1);
+        println!("{}, {}", current.0, current.1);
+        // while current != left_end {
+        //     grid[current.0 as usize][current.1 as usize] =
+        //         std::char::from_u32((jumper % 10) as u32).unwrap();
+            
+        //     jumper += 1;
+        //     current.1 -= 2;
+        // }
+
+        // Go up
+        // while current != up_end {}
+    // }
+
     println!("{:?}", grid);
 
     Ok("end".to_string())
