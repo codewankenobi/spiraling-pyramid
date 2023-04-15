@@ -1,12 +1,12 @@
 fn main() {
-    let result = get_pyramid(4, 10);
+    let result = get_pyramid(3, 10);
     match result {
         Ok(pyramid) => println!("{}", pyramid),
         Err(error) => println!("[ERROR]: {}", error),
     }
 }
 
-fn get_pyramid(start: i8, total_numbers: i32) -> Result<String, String> {
+fn get_pyramid(start: i32, total_numbers: i32) -> Result<String, String> {
     if start < 0 || 9 < start {
         return Err("Start value must be between 0 and 9".to_string());
     }
@@ -17,59 +17,40 @@ fn get_pyramid(start: i8, total_numbers: i32) -> Result<String, String> {
 
     let number_of_rows = get_number_of_rows(total_numbers);
     let number_of_columns = get_number_of_columns(number_of_rows);
+    let mut grid: Vec<i32> = Vec::with_capacity(total_numbers as usize);
+    let mut jumper = number_of_rows;
+    let mut current = start;
 
-    let mut grid: Vec<Vec<char>> = Vec::with_capacity(number_of_rows as usize);
-
-    for _ in 0..number_of_rows {
-        let mut row = Vec::with_capacity(number_of_columns as usize);
-
-        for _ in 0..number_of_columns {
-            row.push('*')
-        }
-
-        grid.push(row)
+    for _ in 0..total_numbers {
+        grid.push(0);
     }
 
-    let mut current = (0, (number_of_columns - 1) / 2);
+    grid[0] = current;
+    current += 1;
 
-    let mut down_end = (number_of_rows - 1, number_of_columns - 1);
-    let mut left_end = (number_of_rows - 1, 0);
-    let mut up_end = (current.0 - 1, current.1 + 1);
+    let mut skip = 2;
 
-    let mut count = 0;
-    let mut jumper = start;
-
-    // println!("{}, {}", down_end.0, down_end.1);
-    // while count < total_numbers {
-        // Go down
-        while current <= down_end {
-            grid[current.0 as usize][current.1 as usize] =
-                std::char::from_u32((jumper % 10) as u32).unwrap();
-
-            jumper += 1;
-            current.0 += 1;
-            current.1 += 1;
+    while jumper > 0 {
+        // Moving down
+        for i in 0..jumper {
+            println!("current: {}, inserting: {}", current, i + skip);
+            grid.insert((i + skip) as usize, current);
+            current += 1;
+            skip += 1;
         }
 
-        down_end.0 -= 1;
-        down_end.1 -= 1;
+        jumper -= 1;
 
-        // println!("{}, {}", down_end.0, down_end.1);
+        // Moving left
+        for i in 0..jumper {}
 
-        // Go left
-        println!("{}, {}", left_end.0, left_end.1);
-        println!("{}, {}", current.0, current.1);
-        // while current != left_end {
-        //     grid[current.0 as usize][current.1 as usize] =
-        //         std::char::from_u32((jumper % 10) as u32).unwrap();
-            
-        //     jumper += 1;
-        //     current.1 -= 2;
-        // }
+        jumper -= 1;
 
-        // Go up
-        // while current != up_end {}
-    // }
+        // Moving Up
+        for i in 0..jumper {}
+
+        jumper -= 1;
+    }
 
     println!("{:?}", grid);
 
